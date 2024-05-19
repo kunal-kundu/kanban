@@ -6,7 +6,6 @@ function Job() {
 
     const [job,setJob] = useState()
 
-    const [name, setname] = useState()
     const [deg, setdeg] = useState()
     const [title, settitle] = useState()
     const [desc, setdesc] = useState()
