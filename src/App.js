@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { CustomKanban } from './CustomKanban'
+import Navbar from './Navbar';
+import Employee from './Employee';
+import Task from './Task';
+import Job from './Job';
 
-function App() {
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <BrowserRouter>
+    <Navbar/>
+      <Routes>
+        
+          <Route path="/" element={<Job />} />
+          <Route path='/employees' element={<Employee/>}/> 
+          <Route path='/task' element={<Task/>}/>
+      </Routes>
+    </BrowserRouter>
+  )
 }
-
-export default App;
