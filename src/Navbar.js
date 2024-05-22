@@ -7,6 +7,7 @@ function Navbar() {
         <Link className='hover:scale-125 text-green-200' to="/employees" >Employee Table</Link>
         <Link className='hover:scale-125 text-yellow-200' to="/task">Task Table</Link>
         <Link className='hover:scale-125 text-red-200' to="/">Job Table</Link>
+        <Link className='hover:scale-125 text-slate-200' to="/kanban">Kanban</Link>
     </div>
   )
 }

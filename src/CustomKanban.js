@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { FaFire } from "react-icons/fa";
 
 export const CustomKanban = () => {
+
   return (
     <div className="h-screen w-full bg-neutral-900 text-neutral-50 pt-20">
       <Board />
@@ -12,6 +13,23 @@ export const CustomKanban = () => {
 };
 
 const Board = () => {
+  const [DEFAULT_CARDS, setDEFAULT_CARDS] = useState([]);
+  fetch(`https://final-project-2024-2lrl6xovla-de.a.run.app/get_jobs`, {
+          method: "GET",
+          headers: {
+              'Content-type': 'application/json'
+          },
+          })
+          .then((response) => response.json())
+          .then((result) => {
+           // console.log(result);
+          setDEFAULT_CARDS(result);
+          })
+          .catch(error => {
+              console.log(error);
+          })
+
+          
   const [cards, setCards] = useState(DEFAULT_CARDS);
 
   return (
@@ -168,7 +186,7 @@ const Column = ({ title, headingColor, cards, column, setCards }) => {
         }`}
       >
         {filteredCards.map((c) => {
-          return <Card key={c.id} {...c} handleDragStart={handleDragStart} />;
+          return <Card key={c[0]} title={c[2]} description={c[3]} column={c[7]} handleDragStart={handleDragStart} />;
         })}
         <DropIndicator beforeId={null} column={column} />
         <AddCard column={column} setCards={setCards} />
@@ -177,16 +195,16 @@ const Column = ({ title, headingColor, cards, column, setCards }) => {
   );
 };
 
-const Card = ({ title, id, column, handleDragStart }) => {
+const Card = ({ title, description, column, handleDragStart }) => {
   return (
     <>
-      <DropIndicator beforeId={id} column={column} />
+      <DropIndicator  column={column} />
       <motion.div
         layout
-        layoutId={id}
+        // layoutId={id}
         draggable="true"
-        onDragStart={(e) => handleDragStart(e, { title, id, column })}
-        className="cursor-grab rounded border border-neutral-700 bg-neutral-800 p-3 active:cursor-grabbing"
+        onDragStart={(e) => handleDragStart(e, { title, column })}
+        className="cursor-grab rounded border border-neutral-700 bg-neutral-800 p-3 active:cursor-grabbing overflow-clip"
       >
         <p className="text-sm text-neutral-100">{title}</p>
       </motion.div>
@@ -300,32 +318,35 @@ const AddCard = ({ column, setCards }) => {
   );
 };
 
-const DEFAULT_CARDS = [
-  // BACKLOG
-  { title: "Look into render bug in dashboard", id: "1", column: "backlog" },
-  { title: "SOX compliance checklist", id: "2", column: "backlog" },
-  { title: "[SPIKE] Migrate to Azure", id: "3", column: "backlog" },
-  { title: "Document Notifications service", id: "4", column: "backlog" },
-  // TODO
-  {
-    title: "Research DB options for new microservice",
-    id: "5",
-    column: "todo",
-  },
-  { title: "Postmortem for outage", id: "6", column: "todo" },
-  { title: "Sync with product on Q3 roadmap", id: "7", column: "todo" },
 
-  // DOING
-  {
-    title: "Refactor context providers to use Zustand",
-    id: "8",
-    column: "doing",
-  },
-  { title: "Add logging to daily CRON", id: "9", column: "doing" },
-  // DONE
-  {
-    title: "Set up DD dashboards for Lambda listener",
-    id: "10",
-    column: "done",
-  },
-];
+
+
+// const DEFAULT_CARDS = [
+//   // BACKLOG
+//   { title: "Look into render bug in dashboard", id: "1", column: "backlog" },
+//   { title: "SOX compliance checklist", id: "2", column: "backlog" },
+//   { title: "[SPIKE] Migrate to Azure", id: "3", column: "backlog" },
+//   { title: "Document Notifications service", id: "4", column: "backlog" },
+//   // TODO
+//   {
+//     title: "Research DB options for new microservice",
+//     id: "5",
+//     column: "todo",
+//   },
+//   { title: "Postmortem for outage", id: "6", column: "todo" },
+//   { title: "Sync with product on Q3 roadmap", id: "7", column: "todo" },
+
+//   // DOING
+//   {
+//     title: "Refactor context providers to use Zustand",
+//     id: "8",
+//     column: "doing",
+//   },
+//   { title: "Add logging to daily CRON", id: "9", column: "doing" },
+//   // DONE
+//   {
+//     title: "Set up DD dashboards for Lambda listener",
+//     id: "10",
+//     column: "done",
+//   },
+// ];
