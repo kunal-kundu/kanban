@@ -7,24 +7,40 @@ export default function Kanban() {
     const [cards, setCards] = useState();
     const [activeCard, setActiveCard] = useState(null)
 
-  fetch(`https://final-project-2024-2lrl6xovla-de.a.run.app/get_jobs`, {
-          method: "GET",
-          headers: {
-              'Content-type': 'application/json'
-          },
-          })
-          .then((response) => response.json())
-          .then((result) => {
-          //console.log(result);
-          setCards(result);
-          })
-          .catch(error => {
-              console.log(error);
-          })
+    useEffect(() => {
+      
+      fetch(`https://final-project-2024-2lrl6xovla-de.a.run.app/get_jobs`, {
+        method: "GET",
+        headers: {
+            'Content-type': 'application/json'
+        },
+        })
+        .then((response) => response.json())
+        .then((result) => {
+        //console.log(result);
+        setCards(result);
+        })
+        .catch(error => {
+            console.log(error);
+        })
 
-    const onDrop =(status, position)=>{
-      console.log(`${activeCard} is going to place into ${status} and the position ${position}`);
+    }, [])
+    
+  
 
+  const onDrop =(title)=>{
+      console.log(`${activeCard} is going to ${title}`);
+
+      
+      let newCards = cards;
+      newCards.map((it)=>{
+        if(it[2]===activeCard){
+          it[7]=title;
+        }
+      })
+      // console.log(newCards);
+      // setCards(newCards);
+      // console.log(cards);
       //call api here to make any changes
       
       // if(activeCard == null || activeCard === undefined) return;
@@ -42,14 +58,14 @@ export default function Kanban() {
     }
 
   return (
-    <div className='w-full h-screen bg-black text-white '>
+    <div className='w-full h-screen bg-black text-white place-items-center'>
     {cards ? 
     <div  className='flex gap-3 p-12 pt-28 bg-black ' > 
     <Colum title="not_started" cards={cards} color="yellow" setActiveCard={setActiveCard} onDrop={onDrop}/>
     <Colum title="inProgress" cards={cards} color="red" setActiveCard={setActiveCard} onDrop={onDrop}/>
     <Colum title="suspended" cards={cards} color="cyan" setActiveCard={setActiveCard} onDrop={onDrop}/>
     <Colum title="completed" cards={cards} color="green" setActiveCard={setActiveCard} onDrop={onDrop}/>
-    <h1>activeCard - {activeCard}</h1>
+    
     </div> 
     : <h1 className='grid h-screen place-items-center text-4xl'>Loading...</h1> 
     }
@@ -64,13 +80,13 @@ const Colum=({title,cards,color,setActiveCard,onDrop})=>{
     return (
     <div classname='bg-neutral-800 p-5 '>
         <h1 className={`pl-4 text-${color}-200`}>{title[0].toUpperCase() + title.substring(1,title.length)}</h1>
-      <DropArea onDrop={()=>onDrop(title,0)}/>
+      <DropArea onDrop={()=>onDrop(title)}/>
         {cards.map((it)=>  {if(it[7]===ti) { 
            return <>
            <Card  name={it[0]} deg={it[1]} title={it[2]}
             desc={it[3]} day={it[4]} time={it[5]} status={it[7]} 
             setActiveCard={setActiveCard} />
-            <DropArea onDrop={()=>onDrop(title,1)}/>
+            <DropArea onDrop={()=>onDrop(title)}/>
            </>
          }  }  )}
         <Card setActiveCard={setActiveCard} />
