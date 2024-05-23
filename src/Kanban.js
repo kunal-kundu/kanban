@@ -39,7 +39,7 @@ export default function Kanban() {
         }
       })
       // console.log(newCards);
-      // setCards(newCards);
+       setCards(newCards);
       // console.log(cards);
       //call api here to make any changes
       
