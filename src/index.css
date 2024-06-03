@@ -108,7 +108,6 @@
 
   .hide_drop {
     opacity: 0;
-    
-    padding: 0px;
+    height: 15px;
     margin: 0px;
   }

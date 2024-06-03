@@ -6,6 +6,7 @@ import DropArea from './DropArea';
 export default function Kanban() {
     const [cards, setCards] = useState();
     const [activeCard, setActiveCard] = useState(null)
+    const [activeID, setactiveID] = useState()
 
     useEffect(() => {
       
@@ -34,13 +35,36 @@ export default function Kanban() {
       
       let newCards = cards;
       newCards.map((it)=>{
-        if(it[2]===activeCard){
+        if(it[8]===activeCard){
           it[7]=title;
         }
       })
       // console.log(newCards);
        setCards(newCards);
       // console.log(cards);
+
+      try
+{
+      let update_api = {"status" : title}
+      fetch(`https://final-project-2024-2lrl6xovla-de.a.run.app/update_job/${activeCard}`,{
+        method:'PUT',
+        headers: {
+          'Content-type': 'application/json'
+      },
+      body : JSON.stringify(update_api)
+    })
+      .then((response) => response.json())
+      .then((result) => {
+      //console.log(result);
+      })
+      .catch(error => {
+          console.log(error);
+      })
+      }
+      catch(err){
+      console.log(err);
+      }
+      
       //call api here to make any changes
       
       // if(activeCard == null || activeCard === undefined) return;
@@ -61,10 +85,10 @@ export default function Kanban() {
     <div className='w-full h-screen bg-black text-white place-items-center'>
     {cards ? 
     <div  className='flex gap-3 p-12 pt-28 bg-black ' > 
-    <Colum title="not_started" cards={cards} color="yellow" setActiveCard={setActiveCard} onDrop={onDrop}/>
-    <Colum title="inProgress" cards={cards} color="red" setActiveCard={setActiveCard} onDrop={onDrop}/>
-    <Colum title="suspended" cards={cards} color="cyan" setActiveCard={setActiveCard} onDrop={onDrop}/>
-    <Colum title="completed" cards={cards} color="green" setActiveCard={setActiveCard} onDrop={onDrop}/>
+    <Colum title="not_started" cards={cards} color="yellow" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID} />
+    <Colum title="inProgress" cards={cards} color="red" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID}/>
+    <Colum title="suspended" cards={cards} color="cyan" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID}/>
+    <Colum title="completed" cards={cards} color="green" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID}/>
     
     </div> 
     : <h1 className='grid h-screen place-items-center text-4xl'>Loading...</h1> 
@@ -84,12 +108,13 @@ const Colum=({title,cards,color,setActiveCard,onDrop})=>{
         {cards.map((it)=>  {if(it[7]===ti) { 
            return <>
            <Card  name={it[0]} deg={it[1]} title={it[2]}
-            desc={it[3]} day={it[4]} time={it[5]} status={it[7]} 
+            desc={it[3]} day={it[4]} time={it[5]} status={it[7]} task_id={it[8]}
             setActiveCard={setActiveCard} />
             <DropArea onDrop={()=>onDrop(title)}/>
            </>
          }  }  )}
         <Card setActiveCard={setActiveCard} />
+        <DropArea onDrop={()=>onDrop(title)}/>
     </div>
     )
 }
@@ -102,13 +127,17 @@ const Card=(props)=>{
     return (
       <div className='modal-wrapper'>
         <div className='modal-container'>
-          <p>1. Employee Name:  {props.props.name}</p>
+          <p>Task T00{props.props.task_id} - {props.props.title}, <br/> Is assigned to {props.props.name}, <br/>
+          On {props.props.day}, <br/> And it's estimated to be completed in {props.props.time} days, <br/>
+          Description of the task- {props.props.desc}
+          </p>
+          {/* <p>1. Employee Name:  {props.props.name}</p>
           <p>2. Designation:  {props.props.deg}</p>
           <p>3. Task:  {props.props.title}</p>
           <p>4. Task Description:  {props.props.desc}</p>
           <p>5. Date:  {props.props.day}</p>
           <p>6. Estimated_time:  {props.props.time}</p>
-          <p>7. status:  {props.props.status}</p>
+          <p>7. status:  {props.props.status}</p> */}
           <button className="red-button" onClick={()=>setShow(!show)}>close</button>
       </div>
       </div>
@@ -119,7 +148,7 @@ const Card=(props)=>{
     return ( 
     
 <>
-    <div draggable onDragStart={()=>props.setActiveCard(props.title)} onDragEnd={()=>props.setActiveCard(null)} 
+    <div draggable onDragStart={()=>props.setActiveCard(props.task_id)} onDragEnd={()=>props.setActiveCard(null)} 
     className='task_card cursor-grab p-2 m-2 rounded-md bg-neutral-800 active:cursor-grabbing w-72 h-24 overflow-hidden' >
     
       {props.title && <p>Task: {props.title}, <br/>
