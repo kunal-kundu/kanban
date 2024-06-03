@@ -85,10 +85,10 @@ export default function Kanban() {
     <div className='w-full h-screen bg-black text-white place-items-center'>
     {cards ? 
     <div  className='flex gap-3 p-12 pt-28 bg-black ' > 
-    <Colum title="not_started" cards={cards} color="yellow" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID} />
-    <Colum title="inProgress" cards={cards} color="red" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID}/>
-    <Colum title="suspended" cards={cards} color="cyan" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID}/>
-    <Colum title="completed" cards={cards} color="green" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID}/>
+    <Colum title="not_started" tag="Not Started" cards={cards} color="yellow" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID} />
+    <Colum title="inProgress" tag="In Progress" cards={cards} color="red" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID}/>
+    <Colum title="suspended" tag="Suspended" cards={cards} color="cyan" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID}/>
+    <Colum title="completed" tag="Completed" cards={cards} color="green" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID}/>
     
     </div> 
     : <h1 className='grid h-screen place-items-center text-4xl'>Loading...</h1> 
@@ -97,13 +97,13 @@ export default function Kanban() {
   )
 }
 
-const Colum=({title,cards,color,setActiveCard,onDrop})=>{
+const Colum=({title,tag,cards,color,setActiveCard,onDrop})=>{
   const ti = title
   //console.log(ti);
 
     return (
     <div classname='bg-neutral-800 p-5 '>
-        <h1 className={`pl-4 text-${color}-200`}>{title[0].toUpperCase() + title.substring(1,title.length)}</h1>
+        <h1 className={`pl-4 text-${color}-200`}>{tag}</h1>
       <DropArea onDrop={()=>onDrop(title)}/>
         {cards.map((it)=>  {if(it[7]===ti) { 
            return <>
@@ -113,7 +113,7 @@ const Colum=({title,cards,color,setActiveCard,onDrop})=>{
             <DropArea onDrop={()=>onDrop(title)}/>
            </>
          }  }  )}
-        <Card setActiveCard={setActiveCard} />
+        
         <DropArea onDrop={()=>onDrop(title)}/>
     </div>
     )
