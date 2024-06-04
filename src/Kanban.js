@@ -133,7 +133,7 @@ const Card=(props)=>{
           <p> 
             <span style={{color:"yellow" , fontSize:"28px"}}>{props.props.title} </span>
             <br/> 
-            <span style={{fontSize:"14px"}}>Status: {props.props.status === "not_started" ? "Not Started" : ""}</span>
+            <span style={{fontSize:"14px"}}>Status: {props.props.status === "not_started" ? "Not Started" : props.props.status === "inProgress" ? "In Progress" : props.props.status === "completed" ? "Completed" : "" }</span>
             <br/>
             <span style={{fontSize:"16px"}}>Assigned to <span style={{fontSize:"22px"}}>{props.props.name}</span></span>
             <br/>
