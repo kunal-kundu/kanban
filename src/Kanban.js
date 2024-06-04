@@ -1,5 +1,6 @@
 import React,{useState,useEffect} from 'react'
-import { FaExpand } from 'react-icons/fa';
+import { FaExpand, FaTrash } from 'react-icons/fa';
+import { FaFire } from "react-icons/fa";
 import { motion } from "framer-motion";
 import DropArea from './DropArea';
 
@@ -55,20 +56,6 @@ export default function Kanban() {
     })
       .then((response) => response.json())
       .then((result) => {
-        fetch(`https://final-project-2024-2lrl6xovla-de.a.run.app/get_jobs`, {
-        method: "GET",
-        headers: {
-            'Content-type': 'application/json'
-        },
-        })
-        .then((response) => response.json())
-        .then((result) => {
-        //console.log(result);
-        setCards(result);
-        })
-        .catch(error => {
-            console.log(error);
-        })
       })
       .catch(error => {
           console.log(error);
@@ -104,7 +91,7 @@ export default function Kanban() {
     <Colum title="inProgress" tag="In Progress" cards={cards} color="red" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID}/>
     <Colum title="completed" tag="Completed" cards={cards} color="green" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID}/>
     {/* <Colum title="suspended" tag="Suspended" cards={cards} color="cyan" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID}/> */}
-    <Colum title="removed" tag="Removed" cards={cards} color="red" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID}/>
+    <ColumDel title="removed" tag="Removed" cards={cards} color="red" setActiveCard={setActiveCard} onDrop={()=>onDrop("removed")} setactiveID={setactiveID}/>
 
     </div> 
     : <h1 className='grid h-screen place-items-center text-4xl'>Loading...</h1> 
@@ -190,3 +177,19 @@ const Card=(props)=>{
     )
 }
 
+const ColumDel = ({title,tag,cards,color,setActiveCard,onDrop})=>{
+  const [showDrop, setshowDrop] = useState(false)
+  return (
+    <div classname='bg-neutral-800 p-5 ' style={{ width:"350px"}}>
+      <h1 className={`pl-4 text-${color}-200`}>{tag}</h1>
+      
+      <FaTrash   
+      onDragEnter={()=> setshowDrop(true)} onDragLeave={()=> setshowDrop(false)}
+      onDrop={()=>{onDrop();setshowDrop(false)}}
+      onDragOver={(e)=>e.preventDefault()}
+      className={showDrop ? 'remove-card-dashed' : 'remove-card'}
+      />
+      
+      </div>
+  )
+}

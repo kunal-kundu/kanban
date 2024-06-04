@@ -120,3 +120,23 @@
     margin-left: 350px;
 
   }
+
+  .remove-card {
+    width: 180px;
+    height: 170px;
+    padding: 25px;
+    border: 2px solid white;
+    border-radius: 10px;
+    margin-top: 25px;
+    opacity: 0.5;
+  }
+
+  .remove-card-dashed{
+    width: 180px;
+    height: 170px;
+    padding: 25px;
+    border: 2px dashed white;
+    border-radius: 10px;
+    margin-top: 25px;
+    opacity: 1;
+  }
