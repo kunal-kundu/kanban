@@ -55,7 +55,20 @@ export default function Kanban() {
     })
       .then((response) => response.json())
       .then((result) => {
-      //console.log(result);
+        fetch(`https://final-project-2024-2lrl6xovla-de.a.run.app/get_jobs`, {
+        method: "GET",
+        headers: {
+            'Content-type': 'application/json'
+        },
+        })
+        .then((response) => response.json())
+        .then((result) => {
+        //console.log(result);
+        setCards(result);
+        })
+        .catch(error => {
+            console.log(error);
+        })
       })
       .catch(error => {
           console.log(error);
@@ -65,6 +78,8 @@ export default function Kanban() {
       console.log(err);
       }
       
+
+
       //call api here to make any changes
       
       // if(activeCard == null || activeCard === undefined) return;
@@ -87,9 +102,10 @@ export default function Kanban() {
     <div  className='flex gap-3 p-12 pt-28 bg-black ' > 
     <Colum title="not_started" tag="Not Started" cards={cards} color="yellow" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID} />
     <Colum title="inProgress" tag="In Progress" cards={cards} color="red" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID}/>
-    <Colum title="suspended" tag="Suspended" cards={cards} color="cyan" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID}/>
     <Colum title="completed" tag="Completed" cards={cards} color="green" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID}/>
-    
+    {/* <Colum title="suspended" tag="Suspended" cards={cards} color="cyan" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID}/> */}
+    <Colum title="removed" tag="Removed" cards={cards} color="red" setActiveCard={setActiveCard} onDrop={onDrop} setactiveID={setactiveID}/>
+
     </div> 
     : <h1 className='grid h-screen place-items-center text-4xl'>Loading...</h1> 
     }
@@ -102,7 +118,7 @@ const Colum=({title,tag,cards,color,setActiveCard,onDrop})=>{
   //console.log(ti);
 
     return (
-    <div classname='bg-neutral-800 p-5 '>
+    <div classname='bg-neutral-800 p-5 ' style={{ width:"350px"}}>
         <h1 className={`pl-4 text-${color}-200`}>{tag}</h1>
       <DropArea onDrop={()=>onDrop(title)}/>
         {cards.map((it)=>  {if(it[7]===ti) { 
@@ -127,10 +143,20 @@ const Card=(props)=>{
     return (
       <div className='modal-wrapper'>
         <div className='modal-container'>
-          <p>Task T00{props.props.task_id} - {props.props.title}, <br/> Is assigned to {props.props.name}, <br/>
-          On {props.props.day}, <br/> And it's estimated to be completed in {props.props.time} days, <br/>
-          Description of the task- {props.props.desc}
+          <p> 
+            <span style={{color:"yellow" , fontSize:"28px"}}>{props.props.title} </span>
+            <br/> 
+            <span style={{fontSize:"14px"}}>Status: {props.props.status === "not_started" ? "Not Started" : ""}</span>
+            <br/>
+            <span style={{fontSize:"16px"}}>Assigned to <span style={{fontSize:"22px"}}>{props.props.name}</span></span>
+            <br/>
+            <span style={{fontSize:"24px", color:"yellow"}}>Description</span>
+            <br/>
+            <span style={{fontSize:"18px"}}>{props.props.desc}</span>
+            <br/>
+            <span><span style={{fontSize:"18px"}}>Estimated Time: </span> {props.props.time} Hours</span>
           </p>
+          <button className="close-button hover:cursor-pointer" onClick={()=>setShow(!show)}>X</button>
           {/* <p>1. Employee Name:  {props.props.name}</p>
           <p>2. Designation:  {props.props.deg}</p>
           <p>3. Task:  {props.props.title}</p>
@@ -138,7 +164,6 @@ const Card=(props)=>{
           <p>5. Date:  {props.props.day}</p>
           <p>6. Estimated_time:  {props.props.time}</p>
           <p>7. status:  {props.props.status}</p> */}
-          <button className="red-button" onClick={()=>setShow(!show)}>close</button>
       </div>
       </div>
     )
