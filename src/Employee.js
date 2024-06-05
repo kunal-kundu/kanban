@@ -28,7 +28,7 @@ function Employee() {
 
         employeeData = JSON.stringify(employeeData)
         
-
+       try{
         fetch('https://final-project-2024-2lrl6xovla-de.a.run.app/add_employee', {
             method: "POST",
             headers: {
@@ -43,6 +43,8 @@ function Employee() {
             .catch(error => {
                 console.log(error);
             })
+        }
+        catch(err){console.log(err);}
     
     }
 
